@@ -174,7 +174,7 @@ const LotChart = (backgcolorswitch: any) => {
     // values inside a donut
     const inner_label = pieSeries.children.push(
       am5.Label.new(root, {
-        text: "[#ffffff]{valueSum}[/]\n[fontSize: 1.0em; #d3d3d3; verticalAlign: super]LOTS[/]",
+        text: "[#ffffff]{valueSum}[/]\n[fontSize: 0.7em; #d3d3d3; verticalAlign: super]TOTAL LOTS[/]",
         // text: '[#000000]{valueSum}[/]\n[fontSize: 0.5em; #d3d3d3; verticalAlign: super]LOTS[/]',
         fontSize: "1.4em",
         centerX: am5.percent(50),
@@ -370,7 +370,7 @@ const LotChart = (backgcolorswitch: any) => {
             display: "flex",
             marginTop: "3px",
             marginLeft: "15px",
-            marginRight: "15px",
+            marginRight: "5px",
             justifyContent: "space-between",
             marginBottom: "10px",
           }}
@@ -384,7 +384,7 @@ const LotChart = (backgcolorswitch: any) => {
           />
           <dl style={{ alignItems: "center" }}>
             <dt style={{ color: primaryLabelColor, fontSize: "1.1rem" }}>
-              TOTAL LOTS
+              PRIVATE LOTS
             </dt>
             <dd
               style={{
@@ -398,15 +398,15 @@ const LotChart = (backgcolorswitch: any) => {
             >
               {thousands_separators(lotNumber[1])}
             </dd>
-            <div
+            {/* <div
               style={{
                 color: "#d1d5db",
                 justifyContent: "center",
                 fontWeight: "normal",
               }}
             >
-              ({thousands_separators(lotNumber[0])})
-            </div>
+              ({thousands_separators(lotNumber[1])})
+            </div> */}
           </dl>
 
           {/* Public Lot Number */}
