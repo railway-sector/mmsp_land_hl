@@ -12,10 +12,15 @@ import {
   generateHandedOver,
   generateLotData,
   generateLotNumber,
+  generateToBeHandedOver,
   thousands_separators,
   zoomToLayer,
 } from "../Query";
-import { statusLotQuery } from "../uniqueValues";
+import {
+  primaryLabelColor,
+  statusLotQuery,
+  valueLabelColor,
+} from "../uniqueValues";
 import { ArcgisMap } from "@arcgis/map-components/dist/components/arcgis-map";
 import { MyContext } from "../contexts/MyContext";
 
@@ -58,6 +63,8 @@ const LotChart = (backgcolorswitch: any) => {
 
   const [lotNumber, setLotNumber] = useState([]);
   const [handedOverNumber, setHandedOverNumber] = useState([]);
+  const [toBeHandedOverNumber, setToBeHandedOverNumber] = useState([]);
+
   // Query
   const qCP = "Package = '" + contractp + "'";
   const qLandType = "Type = '" + landtype + "'";
@@ -101,27 +108,9 @@ const LotChart = (backgcolorswitch: any) => {
       setHandedOverNumber(response);
     });
 
-    // if (!landtype) {
-    //   // Handed Over (Lot) + PTE (Subterranean)
-    //   generateHandedOverPTE().then((response: any) => {
-    //     setHandedOverPteNumber(response);
-    //   });
-    // } else if (landtype === 'Station') {
-    //   // Handed Ove for Lot
-    //   generateHandedOver().then((response: any) => {
-    //     setHandedOverPteNumber(response);
-    //   });
-    // } else if (landtype === 'Subterranean') {
-    //   // PTE for Subterranean
-    //   generatePTE().then((response: any) => {
-    //     setHandedOverPteNumber(response);
-    //   });
-    // }
-
-    // Mode of Acquisition
-    // generateLotMoaData(contractp, landtype, landsection).then((response: any) => {
-    //   setLotMoaData(response);
-    // });
+    generateToBeHandedOver().then((response: any) => {
+      setToBeHandedOverNumber(response);
+    });
   }, [contractp, landtype, landsection]);
 
   // useLayoutEffect runs synchronously. If this is used with React.lazy,
@@ -348,8 +337,8 @@ const LotChart = (backgcolorswitch: any) => {
     legendRef.current?.data.setAll(pieSeriesRef.current.dataItems);
   });
 
-  const primaryLabelColor = "#9ca3af";
-  const valueLabelColor = "#d1d5db";
+  // const primaryLabelColor = "#9ca3af";
+  // const valueLabelColor = "#d1d5db";
 
   return (
     <>
@@ -439,24 +428,24 @@ const LotChart = (backgcolorswitch: any) => {
             marginBottom: "4vh",
           }}
         ></div>
-
-        {/* Handed-Over/PTE */}
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <img
-            src="https://EijiGorilla.github.io/Symbols/Handed_Over_Logo.svg"
-            alt="Land Logo"
-            height={"15%"}
-            width={"15%"}
-            style={{ marginLeft: "20px", marginTop: "20px" }}
-          />
-          <dl style={{ alignItems: "center", marginRight: "30px" }}>
-            <dt style={{ color: primaryLabelColor, fontSize: "1.2rem" }}>
-              HANDED-OVER
+        {/* Handed-Over */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginLeft: "20px",
+            marginRight: "20px",
+          }}
+        >
+          <dl style={{ justifyContent: "space-between" }}>
+            <dt style={{ color: primaryLabelColor, fontSize: "1.1rem" }}>
+              <div style={{ marginBottom: "0px" }}>Handed Over</div>
+              <div style={{ fontSize: "1.0rem" }}>(GC to JV)</div>
             </dt>
             <dd
               style={{
                 color: valueLabelColor,
-                fontSize: "1.7rem",
+                fontSize: "1.6rem",
                 fontWeight: "bold",
                 fontFamily: "calibri",
                 lineHeight: "1.2",
@@ -465,6 +454,25 @@ const LotChart = (backgcolorswitch: any) => {
             >
               {handedOverNumber[0]}% (
               {thousands_separators(handedOverNumber[1])})
+            </dd>
+          </dl>
+          <dl style={{ justifyContent: "space-between" }}>
+            <dt style={{ color: primaryLabelColor, fontSize: "1.1rem" }}>
+              <div style={{ marginBottom: "0px" }}>To be Handed Over</div>
+              <div style={{ fontSize: "1.0rem" }}>(to JV)</div>
+            </dt>
+            <dd
+              style={{
+                color: valueLabelColor,
+                fontSize: "1.6rem",
+                fontWeight: "bold",
+                fontFamily: "calibri",
+                // lineHeight: "1.2",
+                margin: "auto",
+              }}
+            >
+              {toBeHandedOverNumber[0]}% (
+              {thousands_separators(toBeHandedOverNumber[1])})
             </dd>
           </dl>
         </div>

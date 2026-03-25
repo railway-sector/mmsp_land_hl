@@ -16,7 +16,6 @@ import {
   boundaryGroupLayer,
   depotBuildingsGroupLayer,
   evsBoundaryPoGroupLayer,
-  handedOverLotLayer,
   isfLayer,
   lotGroupLayer,
   lotLayer,
@@ -39,7 +38,6 @@ function MapDisplay() {
       arcgisMap.map.add(isfLayer);
       arcgisMap.map.add(boundaryGroupLayer);
       arcgisMap.map.add(stationLayer);
-      arcgisMap.map.add(handedOverLotLayer);
       arcgisMap.map.add(alignmentLine);
       arcgisMap.map.ground.navigationConstraint = "none";
       arcgisMap.view.ui.components = [];

@@ -24,6 +24,8 @@ import {
   isfRelocationStatus,
   isfRelocationStatusLabel,
   isfRelocationColor,
+  handedOverField,
+  tobeHandedOverField,
 } from "./uniqueValues";
 
 /* Standalone table for Dates */
@@ -186,7 +188,6 @@ export const lotLayer = new FeatureLayer({
     },
   },
   layerId: 8,
-
   title: "Land Acquisition",
   labelingInfo: [lotLabel],
   renderer: lotLayerStatusRenderer,
@@ -317,15 +318,21 @@ export const lotLayerBoundary = new FeatureLayer({
 });
 
 /* Handed-Over Lot */
-const handedOverRenderer = new SimpleRenderer({
-  symbol: new SimpleFillSymbol({
-    color: "#FF00C5",
-    style: "solid",
-    outline: new SimpleLineSymbol({
-      color: [110, 110, 110],
-      width: 0.5,
-    }),
-  }),
+const handedOverRenderer = new UniqueValueRenderer({
+  field: handedOverField,
+  uniqueValueInfos: [
+    {
+      value: 1,
+      label: " ",
+      symbol: new SimpleFillSymbol({
+        color: "#E7298A", //[0, 255, 255, 0.1], #00ffff
+        // outline: new SimpleLineSymbol({
+        //   color: "#00ffff",
+        //   width: "4px",
+        // }),
+      }),
+    },
+  ],
 });
 
 export const handedOverLotLayer = new FeatureLayer({
@@ -336,10 +343,44 @@ export const handedOverLotLayer = new FeatureLayer({
     },
   },
   layerId: 8,
-
-  definitionExpression: "HandedOver = 1",
-  title: "Handed-Over Lots",
+  definitionExpression: `${handedOverField} = 1`,
+  title: "Handed Over (GC to JV)",
   renderer: handedOverRenderer,
+  popupEnabled: false,
+});
+
+const toBeHandedOverRenderer = new UniqueValueRenderer({
+  field: tobeHandedOverField,
+  uniqueValueInfos: [
+    {
+      value: 1,
+      label: " ",
+      symbol: new SimpleFillSymbol({
+        color: "#73B2FF", //[0, 255, 255, 0.1], #00ffff
+        // outline: new SimpleLineSymbol({
+        //   color: "#00ffff",
+        //   width: "4px",
+        // }),
+      }),
+    },
+  ],
+});
+
+// To be handed over lot
+export const tobeHandedOverLotLayer = new FeatureLayer({
+  portalItem: {
+    id: "0c172b82ddab44f2bb439542dd75e8ae",
+    portal: {
+      url: "https://gis.railway-sector.com/portal",
+    },
+  },
+  layerId: 8,
+  // outFields: ['*'],
+  // definitionExpression: "HandedOver = 1 AND Type = 'Station'",
+  // title: 'Handed-Over (Station)',
+  definitionExpression: `${tobeHandedOverField} = 1`,
+  title: "To be Handed Over (to JV)",
+  renderer: toBeHandedOverRenderer,
   popupEnabled: false,
 });
 
@@ -696,7 +737,13 @@ export const lotGroupLayer = new GroupLayer({
   title: "Land",
   visible: true,
   visibilityMode: "independent",
-  layers: [pteLotSubteLayer, handedOverLotLayer, lotLayer, publicLotLayer],
+  layers: [
+    publicLotLayer,
+    lotLayer,
+    pteLotSubteLayer,
+    handedOverLotLayer,
+    tobeHandedOverLotLayer,
+  ],
 });
 
 export const evsBoundaryPoGroupLayer = new GroupLayer({

@@ -1,7 +1,13 @@
 import { dateTable, lotLayer } from "./layers";
 import StatisticDefinition from "@arcgis/core/rest/support/StatisticDefinition";
 import * as am5 from "@amcharts/amcharts5";
-import { lotStatusField, statusLotQuery, statusLotLabel } from "./uniqueValues";
+import {
+  lotStatusField,
+  statusLotQuery,
+  statusLotLabel,
+  tobeHandedOverField,
+  lot_id_field,
+} from "./uniqueValues";
 
 // Updat date
 export async function dateUpdate() {
@@ -150,6 +156,32 @@ export async function generateHandedOver() {
     const totaln = stats.total_lot_N;
     const percent = ((handedover / totaln) * 100).toFixed(0);
     return [percent, handedover];
+  });
+}
+
+// To be Handed Over (Count)
+export async function generateToBeHandedOver() {
+  const total_handedover_lot = new StatisticDefinition({
+    onStatisticField: `CASE WHEN ${tobeHandedOverField} = 1 THEN 1 ELSE 0 END`,
+    outStatisticFieldName: "total_handedover_lot",
+    statisticType: "sum",
+  });
+
+  const total_lot_N = new StatisticDefinition({
+    onStatisticField: lot_id_field,
+    outStatisticFieldName: "total_lot_N",
+    statisticType: "count",
+  });
+
+  const query = lotLayer.createQuery();
+  query.outStatistics = [total_handedover_lot, total_lot_N];
+
+  return lotLayer.queryFeatures(query).then((response: any) => {
+    const stats = response.features[0].attributes;
+    const tobehandedover = stats.total_handedover_lot;
+    const totaln = stats.total_lot_N;
+    const percent = ((tobehandedover / totaln) * 100).toFixed(0);
+    return [percent, tobehandedover];
   });
 }
 

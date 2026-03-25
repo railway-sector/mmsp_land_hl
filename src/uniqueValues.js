@@ -1,9 +1,12 @@
 // Chart and chart label color
-export const primaryLabelColor = "#9ca3af";
+export const primaryLabelColor = "#d1d5db";
 export const valueLabelColor = "#d1d5db";
 
 // Lot
 export const lotStatusField = "H_Level";
+export const tobeHandedOverField = "not_yet";
+export const handedOverField = "HandedOver";
+export const lot_id_field = "Id";
 export const statusLotLabel = [
   "Ready for Handover / Handed Over",
   "Pending Delivery",
@@ -65,7 +68,8 @@ export async function defineActions(event) {
   item.title === "East Valenzuela Station" ||
   item.title === "Senate-DepEd Boundary" ||
   item.title === "PTE Subterranean Lots" ||
-  item.title === "Handed-Over Lots" ||
+  item.title === "Handed Over (GC to JV)" ||
+  item.title === "To be Handed Over (to JV)" ||
   item.title === "Structures" ||
   item.title === "EVS Station/Creek"
     ? (item.visible = false)
